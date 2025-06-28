@@ -15,7 +15,7 @@ const NewsList = () => {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/fetch-news/')
+    axios.get('https://uttrakhand-news-backend.onrender.com/api/fetch-news/')
       .then((res) => {
         setNews(res.data);
         setFilteredNews(res.data);
