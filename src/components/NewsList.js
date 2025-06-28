@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './NewsList.css';
 
+const API_URL = 'https://uttrakhand-news-backend.onrender.com/api/fetch-news/';
+
 const NewsList = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,8 +17,9 @@ const NewsList = () => {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    axios.get('https://uttrakhand-news-backend.onrender.com/api/fetch-news/')
+    axios.get(API_URL)
       .then((res) => {
+        console.log("Fetched news:", res.data);
         setNews(res.data);
         setFilteredNews(res.data);
         setLoading(false);
@@ -52,7 +55,7 @@ const NewsList = () => {
     setTimeout(() => {
       setDarkMode(!darkMode);
       setAnimating(false);
-    }, 500); // smooth transition
+    }, 500);
   };
 
   const paginatedNews = filteredNews.slice(
@@ -76,7 +79,7 @@ const NewsList = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        {/* <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="">All Categories</option>
           <option value="Politics">Politics</option>
           <option value="Weather">Weather</option>
@@ -84,7 +87,7 @@ const NewsList = () => {
           <option value="Tourism">Tourism</option>
           <option value="Disaster">Disaster</option>
           <option value="General">General</option>
-        </select> */}
+        </select>
       </div>
 
       {loading ? (
@@ -98,11 +101,9 @@ const NewsList = () => {
               <h2>{item.title}</h2>
               <p className="short-desc">{item.short_description || 'No short description'}</p>
               <p className="full-desc">{item.full_description || 'No full description'}</p>
-              <p className="meta">{item.source} | {new Date(item.published_at).toLocaleString()}</p>
+              <p className="meta">{item.source || 'Unknown'} | {item.published_at ? new Date(item.published_at).toLocaleString() : 'N/A'}</p>
               <p className="meta"><strong>Category:</strong> {item.category || 'N/A'}</p>
-              <a href={item.url} target="_blank" rel="noreferrer">
-                🔗 Read Full Article
-              </a>
+              <a href={item.url} target="_blank" rel="noreferrer">🔗 Read Full Article</a>
             </div>
           ))}
         </div>
